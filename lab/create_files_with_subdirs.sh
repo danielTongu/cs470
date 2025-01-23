@@ -2,7 +2,7 @@
 
 
 
-# File Name: create_files with_subdors.sh
+# File Name: create_files with_subdirs.sh
 # Description:
 # - Creates a main directory with the current date and time as its name.
 # - Generates 10 subdirectories; each containing 10 .txt file,
@@ -33,7 +33,7 @@ fi
 
 
 
-#Create subdirectorties and popluate files
+#Create subdirectories and populate files
 echo "Creating 10 subdirectories and files within them..."
 
 for i in {101..110}; do
@@ -42,7 +42,7 @@ for i in {101..110}; do
     echo "Creating subdirectory, $SUB_DIR..."
     mkdir "$SUB_DIR"
 
-    #check if the subdirectory was created succesfully
+    #check if the subdirectory was created successfully
     if [ ! -d "$SUB_DIR" ]; then
         echo "Error: Failed to create subdirectory $SUBDIR." >&2
         exit 1
@@ -61,7 +61,7 @@ for i in {101..110}; do
         #write the programming language to the file
         echo "${LANGUAGES[LANGUAGE_INDEX]}" > "$FILE_PATH"
 
-        #check if the file was cretated successfully
+        #check if the file was created successfully
         if [ ! -f "$FILE_PATH" ]; then
             echo "Error: Failed to create file $FILE_PATH." >&2
             exit 1
