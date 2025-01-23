@@ -53,6 +53,7 @@ echo "Creating 10 subdirectories and files within them..."
 for i in {101..110}; do
     #create a subdirectory
     SUB_DIR="$MAIN_DIR/$DIR_NAME_PREFIX$i"
+    echo
     echo "Creating $SUB_DIR ..."
     mkdir "$SUB_DIR"
 
