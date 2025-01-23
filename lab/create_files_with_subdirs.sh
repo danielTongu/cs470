@@ -18,6 +18,9 @@ LANGUAGES=("Python" "Java" "C++" "JavaScript" "Ruby" "Go" "Swift" "PHP" "Kotlin"
 #Current date and time formatted
 CURRENT_DATE_TIME=$(date +"%Y%m%d_%H%M%S")
 
+#prefix for each subdirectory
+DIR_NAME_PREFIX="file"
+
 
 
 
@@ -47,8 +50,8 @@ fi
 echo "Creating 10 subdirectories and files within them..."
 for i in {101..110}; do
     #create a subdirectory
-    SUB_DIR="$MAIN_DIR/subdir$i"
-    echo "Creating subdirectory, $SUB_DIR..."
+    SUB_DIR="$MAIN_DIR/$DIR_NAME_PREFIX$i"
+    echo "\nCreating $DIR_NAME_PREFIX$i ..."
     mkdir "$SUB_DIR"
 
     #check if the subdirectory was created successfully
@@ -61,7 +64,7 @@ for i in {101..110}; do
     # create 10 unique files in the subdirectory
     for j in {501..510}; do
         #Create the file path
-        FILE_PATH="$SUB_DIR/file$j.txt"
+        FILE_PATH="$SUB_DIR/$DIR_NAME_PREFIX$j.txt"
 
         #Calculate the index of the programming language
         LANGUAGES_LENGTH=${#LANGUAGES[@]}
@@ -76,24 +79,15 @@ for i in {101..110}; do
             exit 1
         fi
     done
+
+    #print the files in the subdirectory
+    echo "contents of $SUB_DIR: "
+    ls $SUB_DIR
 done
 
 
 
 
 # Final message indicating script completion
-echo "Script execution completed successfully."
+echo "\nScript execution completed successfully."
 echo "Directory structure created under $MAIN_DIR."
-
-
-
-
-# Ask the user if they want to print the directory structure
-read -p "Would you like to print the contents of the directory structure (yes/no)? " RESPONSE
-if [[ "$RESPONSE" =~ ^[Yy][Ee][Ss]$ ]]; then
-    echo "Directory structure and contents:"
-    #find "$MAIN_DIR" -type d -print
-    find "$MAIN_DIR" -type f -print
-else
-    echo "Skipping directory structure printout. Exiting program."
-fi
