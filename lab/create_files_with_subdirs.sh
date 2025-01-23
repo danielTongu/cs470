@@ -47,8 +47,13 @@ fi
 
 
 
+
 #prefix for naming each subdirectory
 DIR_NAME_PREFIX="file"
+
+# Initialize a counter for created subdirectories
+SUCCESSFUL_SUBDIR_COUNT=0
+
 
 
 
@@ -60,10 +65,12 @@ for i in {101..110}; do
     echo "Creating $SUB_DIR ..."
     mkdir "$SUB_DIR"
 
-    #check if the subdirectory was created successfully
+    # check if the subdirectory was created successfully
     if [ ! -d "$SUB_DIR" ]; then
-        echo "Error: Failed to create subdirectory $SUBDIR." >&2
+        echo "Error: Failed to create subdirectory $SUB_DIR." >&2
         exit 1
+    else
+        SUCCESSFUL_SUBDIR_COUNT=$((SUCCESSFUL_SUBDIR_COUNT + 1))
     fi
 
 
@@ -93,9 +100,15 @@ done
 
 
 
+# Report the result after exiting the loop
+echo
+if [ "$SUCCESSFUL_SUBDIR_COUNT" -eq 10 ]; then
+    echo "All 10 subdirectories were successfully created under $MAIN_DIR."
+else
+    echo "Error: Only $SUCCESSFUL_SUBDIR_COUNT out of 10 subdirectories were created." >&2
+    exit 1
+fi
+
 
 # Final message indicating script completion
-echo
-echo "Script execution completed successfully."
-echo "Directory structure created under $MAIN_DIR."
 echo "Process terminated."
