@@ -17,13 +17,13 @@ LANGUAGES=("Python" "Java" "C++" "JavaScript" "Ruby" "Go" "Swift" "PHP" "Kotlin"
 
 #Current date and time, formatted
 CURRENT_DATE_TIME=$(date +"%Y%m%d_%H%M%S")
-echo "Current date time $CURRENT_DATE_TIME"
 
 
 
 
 # Main directory name
 MAIN_DIR=$CURRENT_DATE_TIME
+echo "Main directory name: $MAIN_DIR"
 
 # Remove the main directory if it already exists to avoid duplicates
 if [ -d "$MAIN_DIR" ]; then
@@ -53,7 +53,7 @@ echo "Creating 10 subdirectories and files within them..."
 for i in {101..110}; do
     #create a subdirectory
     SUB_DIR="$MAIN_DIR/$DIR_NAME_PREFIX$i"
-    echo "Creating $DIR_NAME_PREFIX$i ..."
+    echo "Creating $SUB_DIR ..."
     mkdir "$SUB_DIR"
 
     #check if the subdirectory was created successfully
