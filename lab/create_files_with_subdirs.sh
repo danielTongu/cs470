@@ -59,7 +59,6 @@ for i in {101..110}; do
 
 
     # create 10 unique files in the subdirectory
-    echo "Creating files in subdirectory, $SUB_DIR..."
     for j in {501..510}; do
         #Create the file path
         FILE_PATH="$SUB_DIR/file$j.txt"
@@ -93,7 +92,7 @@ echo "Directory structure created under $MAIN_DIR."
 read -p "Would you like to print the contents of the directory structure (yes/no)? " RESPONSE
 if [[ "$RESPONSE" =~ ^[Yy][Ee][Ss]$ ]]; then
     echo "Directory structure and contents:"
-    find "$MAIN_DIR" -type d -print
+    #find "$MAIN_DIR" -type d -print
     find "$MAIN_DIR" -type f -print
 else
     echo "Skipping directory structure printout. Exiting program."
