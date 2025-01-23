@@ -87,7 +87,7 @@ for i in {101..110}; do
     done
 
     #print the files in the subdirectory
-    echo "contents of $SUB_DIR: "
+    echo "Contents of $SUB_DIR: "
     ls $SUB_DIR
 done
 
@@ -98,4 +98,4 @@ done
 echo
 echo "Script execution completed successfully."
 echo "Directory structure created under $MAIN_DIR."
-echo "Process terminated"
+echo "Process terminated."
