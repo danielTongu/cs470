@@ -11,6 +11,7 @@
 # Date Jan 21, 2025
 
 
+echo "Initiating process..."
 
 #Array of programming languages
 LANGUAGES=("Python" "Java" "C++" "JavaScript" "Ruby" "Go" "Swift" "PHP" "Kotlin" "Rust")
@@ -31,11 +32,14 @@ if [ -d "$MAIN_DIR" ]; then
     rm -rf "$MAIN_DIR"
 fi
 
-# Create the main directory
-echo "Creating the main directory ..."
-mkdir "$MAIN_DIR"
 
-#Check if the main directory was created successfully
+#Notify user the program current status
+echo "Creating main directory, and its subdirectories containing files..."
+
+
+
+#Create the main directory and check if the main directory was created successfully
+mkdir "$MAIN_DIR"
 if [ ! -d "$MAIN_DIR" ]; then
     echo "Error: Failed to create the main directory $MAIN_DIR." >&2
     exit 1
@@ -43,13 +47,12 @@ fi
 
 
 
-#prefix for each subdirectory
+#prefix for naming each subdirectory
 DIR_NAME_PREFIX="file"
 
 
 
 #Create subdirectories and populate files
-echo "Creating 10 subdirectories and files within them..."
 for i in {101..110}; do
     #create a subdirectory
     SUB_DIR="$MAIN_DIR/$DIR_NAME_PREFIX$i"
@@ -95,3 +98,4 @@ done
 echo
 echo "Script execution completed successfully."
 echo "Directory structure created under $MAIN_DIR."
+echo "Process terminated"
