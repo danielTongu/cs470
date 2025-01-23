@@ -15,11 +15,9 @@
 #Array of programming languages
 LANGUAGES=("Python" "Java" "C++" "JavaScript" "Ruby" "Go" "Swift" "PHP" "Kotlin" "Rust")
 
-#Current date and time formatted
+#Current date and time, formatted
 CURRENT_DATE_TIME=$(date +"%Y%m%d_%H%M%S")
-
-#prefix for each subdirectory
-DIR_NAME_PREFIX="file"
+echo "Current date time $CURRENT_DATE_TIME"
 
 
 
@@ -34,7 +32,7 @@ if [ -d "$MAIN_DIR" ]; then
 fi
 
 # Create the main directory
-echo "Creating the main directory: $MAIN_DIR..."
+echo "Creating the main directory ..."
 mkdir "$MAIN_DIR"
 
 #Check if the main directory was created successfully
@@ -45,13 +43,17 @@ fi
 
 
 
+#prefix for each subdirectory
+DIR_NAME_PREFIX="file"
+
+
 
 #Create subdirectories and populate files
 echo "Creating 10 subdirectories and files within them..."
 for i in {101..110}; do
     #create a subdirectory
     SUB_DIR="$MAIN_DIR/$DIR_NAME_PREFIX$i"
-    echo "\nCreating $DIR_NAME_PREFIX$i ..."
+    echo "Creating $DIR_NAME_PREFIX$i ..."
     mkdir "$SUB_DIR"
 
     #check if the subdirectory was created successfully
@@ -89,5 +91,6 @@ done
 
 
 # Final message indicating script completion
-echo "\nScript execution completed successfully."
+echo
+echo "Script execution completed successfully."
 echo "Directory structure created under $MAIN_DIR."
