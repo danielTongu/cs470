@@ -34,7 +34,7 @@ int main() {
 
     // List of commands that each child process will execute
     char *commands[NUM_CHILDREN][3] = {
-        {"echo", "Hello + Your Name", NULL},  // Print custom message
+        {"echo", "Hello Daniel", NULL},  // Print custom message
         {"ls", "-l", NULL},                   // List directory contents in long format
         {"pwd", NULL, NULL},                   // Print current working directory
         {"date", NULL, NULL},                  // Display system date and time
