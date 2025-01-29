@@ -1,37 +1,45 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 /**
- * @brief Main function to copy a file using the `cp` command.
- * 
- * This program takes two command-line arguments: the source file
- * and the destination file. It then executes the `cp` command using
- * `system()` to copy the file.
- * 
- * @param argc Argument count
- * @param argv Argument vector (array of arguments)
- * @return int Returns 0 on success, 1 on failure
+ * @brief Main function to create directories and copy files using execvp.
+ *
+ * This program:
+ * 1. Creates `source_dir` and `des_dir` using the `mkdir -p` command.
+ * 2. Creates three `.txt` files inside `source_dir` using `touch`.
+ * 3. Uses `execvp()` to copy the entire `source_dir` into `des_dir`.
+ *
+ * @return int Returns 0 on success, exits with failure status otherwise.
  */
-int main(int argc, char *argv[]) {
-    // Ensure correct number of arguments
-    if (argc != 3) {
-        fprintf(stderr, "Usage: %s <source_file> <destination_file>\n", argv[0]);
-        return 1;
+int main() {
+    // Create source and destination directories
+    if (system("mkdir -p source_dir des_dir") == -1) {
+        perror("Failed to create directories");
+        exit(EXIT_FAILURE);
     }
 
-    // Construct the command string
-    char command[512];
-    snprintf(command, sizeof(command), "cp %s %s", argv[1], argv[2]);
-
-    // Execute the command
-    int status = system(command);
-
-    // Check if the command executed successfully
-    if (status == -1) {
-        perror("system");
-        return 1;
+    // Create three text files inside the source directory
+    if (system("touch source_dir/file1.txt source_dir/file2.txt source_dir/file3.txt") == -1) {
+        perror("Failed to create files");
+        exit(EXIT_FAILURE);
     }
 
-    printf("File copied successfully from %s to %s\n", argv[1], argv[2]);
-    return 0;
+    // Prepare the arguments for execvp
+    char *args[] = {
+        "cp",     // Command label
+        "-r",     // Recursive copy flag (to copy directories)
+        "source_dir",
+        "des_dir",
+        NULL      // Null-terminator for execvp
+    };
+
+    printf("Copying files from source_dir to des_dir...\n");
+
+    // Execute the copy command
+    execvp("cp", args);
+
+    // If execvp fails, print an error message and exit
+    perror("execvp failed");
+    exit(EXIT_FAILURE);
 }
