@@ -5,46 +5,45 @@
 #include <sys/wait.h>
 
 
-#define NUM_CHILDREN 10  // Define the number of child processes
+
+
+#define NUM_CHILDREN 10  // Ensure exactly 10 child processes are created
+#define MAX_ARGS 3       // Max arguments per command (command + 1 argument + NULL for execvp)
+
 
 
 
 /**
- * Function to execute a command in a child process.
- * This function replaces the child process with a new program using execvp().
- * @param command The command to execute (array of strings).
+ * Main function to create child processes and execute predefined commands.
+ * Each child executes one command from a predefined list.
+ * The parent process waits for all children to finish.
  */
-void execute_command(char *command[]) {
-    execvp(command[0], command);
-
-    // If execvp() fails, print an error and exit the child process
-    perror("execvp failed");
-    exit(EXIT_FAILURE);
-}
-
-
-
-
-
 int main() {
-    pid_t pids[NUM_CHILDREN];  // Array to store child process PIDs
-    int status;                // Variable to store child process exit status
+    pid_t pid;  // Process ID for child processes
+    int status; // Variable to store child exit status
 
 
 
-    // List of commands that each child process will execute
-    char *commands[NUM_CHILDREN][3] = {
-        {"echo", "Hello Daniel", NULL},  // Print custom message
-        {"ls", "-l", NULL},                   // List directory contents in long format
-        {"pwd", NULL, NULL},                   // Print current working directory
-        {"date", NULL, NULL},                  // Display system date and time
-        {"whoami", NULL, NULL},                // Show current user
-        {"ps", NULL, NULL},                    // Display active processes
-        {"uptime", NULL, NULL},                // Show system uptime
-        {"hostname", NULL, NULL},              // Show system hostname
-        {"df", "-h", NULL},                    // Display disk space usage
-        {"id", NULL, NULL}                     // Show user ID and group ID
+
+    /**
+     * List of commands to be executed by child processes.
+     * Each command is a NULL-terminated array of strings.
+     * MAX_ARGS ensures each row has a fixed size, avoiding memory issues.
+     */
+    char *commands[][MAX_ARGS] = {
+        {"echo", "Hello Daniel", NULL},  // Print a message
+        {"ls", "-l", NULL},              // List directory contents in long format
+        {"pwd", NULL, NULL},             // Print current working directory
+        {"date", NULL, NULL},            // Display system date and time
+        {"whoami", NULL, NULL},          // Show current logged-in user
+        {"ps", NULL, NULL},              // Display active processes
+        {"uptime", NULL, NULL},          // Show system uptime
+        {"hostname", NULL, NULL},        // Show system hostname
+        {"df", "-h", NULL},              // Display disk space usage
+        {"id", NULL, NULL}               // Show user ID and group ID
     };
+
+
 
 
 
@@ -52,29 +51,47 @@ int main() {
 
 
 
-    // Loop to create child processes
-    for (int i = 0; i < NUM_CHILDREN; i++) {
-        pids[i] = fork();  // Create a new child process
 
-        if (pids[i] < 0) {  // If fork fails
-            perror("Fork failed");
+    // Dynamically determine the number of available commands
+    size_t num_commands = sizeof(commands) / sizeof(commands[0]);
+
+
+
+
+    // Create child processes to execute commands.
+    for (size_t i = 0; i < NUM_CHILDREN; i++) {
+        pid = fork();  // Fork a new process
+
+        if (pid < 0) {
+            perror("Fork failed");  // If fork fails, print error and exit
             exit(EXIT_FAILURE);
-        } else if (pids[i] == 0) { // Child process executes here
-            printf("Child process %d (PID: %d) executing: %s\n", i + 1, getpid(), commands[i][0]);
-            execute_command(commands[i]);  // Execute command
+        } else if (pid == 0) {
+            // Determine which command to execute (cycle if needed)
+            size_t cmd_index = i % num_commands;
+            printf("Child process %zu (PID: %d) executing: %s\n", i + 1, getpid(), commands[cmd_index][0]);
+
+
+            // Execute the command in the child process
+            execvp(commands[cmd_index][0], commands[cmd_index]);
+
+
+            // If execvp() fails, print an error and terminate the child
+            perror("execvp failed");
+            exit(EXIT_FAILURE);
         }
     }
 
 
 
-    // Parent process waits for all child processes to complete
-    for (int i = 0; i < NUM_CHILDREN; i++) {
-        pid_t pid = waitpid(pids[i], &status, 0);  // Wait for specific child
 
-        if (pid > 0) {  // If waitpid was successful
-            if (WIFEXITED(status)) {  // If the child exited normally
+    // Parent process waits for all child processes to complete
+    for (size_t i = 0; i < NUM_CHILDREN; i++) {
+        pid = wait(&status); // To return the PID of a finished child; we check its exit status
+
+        if (pid > 0) {
+            if (WIFEXITED(status)) {  /* If the child exited normally */
                 printf("Child PID %d exited normally with status %d\n", pid, WEXITSTATUS(status));
-            } else if (WIFSIGNALED(status)) {  // If child was terminated by a signal
+            } else if (WIFSIGNALED(status)) {  /* If the child was terminated by a signal */
                 printf("Child PID %d was terminated by signal %d\n", pid, WTERMSIG(status));
             }
         }
@@ -82,7 +99,9 @@ int main() {
 
 
 
+
     printf("All %d child processes have completed. Parent process exiting.\n", NUM_CHILDREN);
+
 
 
 
