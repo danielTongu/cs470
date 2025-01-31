@@ -6,7 +6,6 @@
 
 
 
-
 #define NUM_CHILDREN 10  // Ensure exactly 10 child processes are created
 #define MAX_ARGS 3       // Max arguments per command (command + 1 argument + NULL for execvp)
 
