@@ -34,12 +34,12 @@ int main() {
         {"ls", "-l", NULL},              // List directory contents in long format
         {"pwd", NULL, NULL},             // Print current working directory
         {"date", NULL, NULL},            // Display system date and time
-        {"whoami", NULL, NULL},          // Show current logged-in user
+        //{"whoami", NULL, NULL},          // Show current logged-in user
         {"ps", NULL, NULL},              // Display active processes
         {"uptime", NULL, NULL},          // Show system uptime
-        {"hostname", NULL, NULL},        // Show system hostname
+        //{"hostname", NULL, NULL},        // Show system hostname
         {"df", "-h", NULL},              // Display disk space usage
-        {"id", NULL, NULL}               // Show user ID and group ID
+        //{"id", NULL, NULL}               // Show user ID and group ID
     };
 
 
@@ -61,8 +61,8 @@ int main() {
     for (size_t i = 0; i < NUM_CHILDREN; i++) {
         pid = fork();  // Fork a new process
 
-        if (pid < 0) {
-            perror("Fork failed");  // If fork fails, print error and exit
+        if (pid < 0) { /* If fork fails, print error and exit */
+            perror("Fork failed");
             exit(EXIT_FAILURE);
         } else if (pid == 0) {
             // Determine which command to execute (cycle if needed)
