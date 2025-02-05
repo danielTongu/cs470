@@ -25,7 +25,7 @@ int main() {
      * MAX_ARGS ensures each row has a fixed size, avoiding memory issues.
      */
     char *commands[][MAX_ARGS] = {
-        {"echo", "Hello Daniel", NULL},  // Print a message
+        {"echo", "Hello Daniel, this is the first listed command", NULL},  // Print a message
         {"ls", "-l", NULL},              // List directory contents in long format
         {"pwd", NULL, NULL},             // Print current working directory
         {"date", NULL, NULL},            // Display system date and time
