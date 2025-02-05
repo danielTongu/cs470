@@ -54,7 +54,7 @@ int main() {
 
         } else if (pid == 0) { /* Child process */
             // Determine which command to execute (cycle through commands if needed)
-            size_t cmd_index = i % num_commands;
+            int cmd_index = i % num_commands;
             printf("[Child %d | PID: %d] Executing command: %s\n", i + 1, getpid(), commands[cmd_index][0]);
 
             // Execute the command in the child process
