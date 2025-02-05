@@ -57,9 +57,7 @@ int main() {
             printf("Child process (PID: %d) executing: %s\n", getpid(), commands[cmd_index][0]);
 
             // Execute the command in the child process
-            printf("-----\n");
             execvp(commands[cmd_index][0], commands[cmd_index]);
-            printf("-----\n");
 
             // If execvp() fails, print an error and terminate the child
             perror("execvp failed");
