@@ -54,10 +54,12 @@ int main() {
 
             // Determine which command to execute (cycle through commands if needed)
             size_t cmd_index = i % num_commands;
-            printf("Child process %d (PID: %d) executing: %s\n", i + 1, getpid(), commands[cmd_index][0]);
+            printf("Child process (PID: %d) executing: %s\n", getpid(), commands[cmd_index][0]);
 
             // Execute the command in the child process
+            printf("-----\n");
             execvp(commands[cmd_index][0], commands[cmd_index]);
+            printf("-----\n");
 
             // If execvp() fails, print an error and terminate the child
             perror("execvp failed");
@@ -68,7 +70,7 @@ int main() {
 
     // Parent process waits for all child processes to complete
     while ((pid = wait(&status)) > 0) {
-        printf("Child process with PID %d finished with status %d\n", pid, WEXITSTATUS(status));
+        printf("Child process (PID %d) finished with status %d\n", pid, WEXITSTATUS(status));
     }
 
 
