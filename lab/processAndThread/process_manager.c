@@ -44,22 +44,24 @@ int main() {
 
     // Create child processes to execute commands
     for (int i = 0; i < NUM_CHILDREN; i++) {
+        printf("[Parent PID: %d] Creating child process %d...\n", getpid(), i + 1);
         pid = fork();  // Fork a new process
 
         if (pid < 0) { /* If fork fails, print error and exit */
+            fprintf(stderr, "[Parent PID: %d] Failed to create child process [%d]: ", getpid(), i + 1);
             perror("Fork failed");
             exit(EXIT_FAILURE);
 
         } else if (pid == 0) { /* Child process */
-
             // Determine which command to execute (cycle through commands if needed)
             size_t cmd_index = i % num_commands;
-            printf("Child process (PID: %d) executing: %s\n", getpid(), commands[cmd_index][0]);
+            printf("[Child %d | PID: %d] Executing command: %s\n", i + 1, getpid(), commands[cmd_index][0]);
 
             // Execute the command in the child process
             execvp(commands[cmd_index][0], commands[cmd_index]);
 
             // If execvp() fails, print an error and terminate the child
+            fprintf(stderr, "[Child %d | PID: %d] Failed to execute command '%s': ", i + 1, getpid(), commands[cmd_index][0]);
             perror("execvp failed");
             exit(EXIT_FAILURE);
         }
@@ -68,11 +70,22 @@ int main() {
 
     // Parent process waits for all child processes to complete
     while ((pid = wait(&status)) > 0) {
-        printf("Child process (PID %d) finished with status %d\n", pid, WEXITSTATUS(status));
+        // Check if the child process exited normally
+        if (WIFEXITED(status)) {
+            printf("[Parent PID: %d] Child process (PID: %d) finished with exit status %d\n", getpid(), pid, WEXITSTATUS(status));
+        }
+        // Check if the child process was terminated by a signal
+        else if (WIFSIGNALED(status)) {
+            printf("[Parent PID: %d] Child process (PID: %d) terminated by signal %d\n", getpid(), pid, WTERMSIG(status));
+        }
+        // Handle other abnormal termination cases
+        else {
+            printf("[Parent PID: %d] Child process (PID: %d) ended abnormally\n", getpid(), pid);
+        }
     }
 
 
-    printf("All %d child processes have completed. Parent process exiting.\n", NUM_CHILDREN);
+    printf("[Parent PID: %d] All %d child processes have completed. Parent process exiting.\n", getpid(), NUM_CHILDREN);
 
 
     return EXIT_SUCCESS;
