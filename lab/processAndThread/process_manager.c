@@ -35,7 +35,7 @@ int main() {
     };
 
 
-    printf("Parent process (PID: %d) is creating %d child processes...\n", getpid(), NUM_CHILDREN);
+    printf("[Parent PID: %d] Creating %d child processes...\n", getpid(), NUM_CHILDREN);
 
 
     // Dynamically determine the number of available commands
