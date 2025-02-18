@@ -1,3 +1,7 @@
+
+
+
+/*
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -25,7 +29,7 @@ typedef struct {
  * @param proc Array of processes.
  * @param n Number of processes.
  * @param quantum Time quantum for the Round Robin scheduling.
- */
+ *
 void calculateWaitingTimeAndExecutionOrder(Process proc[], int n, int quantum) {
     int remaining[MAX_EXECUTIONS]; // Array to store remaining burst times
     for (int i = 0; i < n; i++) {
@@ -73,7 +77,7 @@ void calculateWaitingTimeAndExecutionOrder(Process proc[], int n, int quantum) {
  * Function to calculate turnaround times for all processes.
  * @param proc Array of processes.
  * @param n Number of processes.
- */
+ *
 void calculateTurnaroundTime(Process proc[], int n) {
     for (int i = 0; i < n; i++) {
         proc[i].turnaround_time = proc[i].waiting_time + proc[i].burst_time;
@@ -88,7 +92,7 @@ void calculateTurnaroundTime(Process proc[], int n) {
  * @param proc Array of processes.
  * @param n Number of processes.
  * @param quantum Time quantum for the Round Robin scheduling.
- */
+ *
 void roundRobin(Process proc[], int n, int quantum) {
     calculateWaitingTimeAndExecutionOrder(proc, n, quantum);
     calculateTurnaroundTime(proc, n);
@@ -101,7 +105,7 @@ void roundRobin(Process proc[], int n, int quantum) {
  * Function to print process details.
  * @param proc Array of processes.
  * @param n Number of processes.
- */
+ *
 void printProcesses(Process proc[], int n) {
     printf("Process ID\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time\n");
     for (int i = 0; i < n; i++) {
@@ -138,3 +142,4 @@ int main() {
 
     return 0;
 }
+*/

@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <limits.h>
 
-// Structure to represent a process
 typedef struct {
     int process_id;
     int arrival_time;
@@ -10,6 +9,80 @@ typedef struct {
     int remaining_time;
     int waiting_time;
     int turnaround_time;
+    int is_completed;
+} Process;
+
+int n; // Number of processes
+
+// Function to find the index of the process with the shortest remaining time
+int findNextProcess(Process proc[], int current_time) {
+    int min_time = INT_MAX;
+    int index = -1;
+    for (int i = 0; i < n; i++) {
+        // your code
+    }
+    return index;
+}
+// Function to perform the SRTF scheduling
+void srtf(Process proc[]) {
+    int current_time = 0;
+    int completed = 0;
+    int prev = -1;
+    // Initialize waiting and turnaround times
+    // Build the loop to execute processes in the queue list
+    while (completed != n) {
+        int index = findNextProcess(proc, current_time);
+        //Process found to execute
+    }
+}
+// Function to print the processes and their details
+void printProcesses(Process proc[]) {
+    printf("Process ID\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time\n");
+
+    for (int i = 0; i < n; i++) {
+        printf(
+            "%d\t\t%d\t\t%d\t\t%d\t\t%d\n",
+            proc[i].process_id,
+            proc[i].arrival_time,
+            proc[i].burst_time,
+            proc[i].waiting_time,
+            proc[i].turnaround_time
+        );
+    }
+}
+
+int main() {
+    // Initialize processes with their IDs, arrival times, and burst times
+    Process proc[] = {
+        {1, 0, 8},
+        {2, 1, 4},
+        {3, 2, 9},
+        {4, 3, 5}
+    };
+
+    n = sizeof(proc) / sizeof(proc[0]);
+    srtf(proc);
+    printProcesses(proc);
+    return 0;
+}
+
+
+
+
+
+/*
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+
+// Structure to represent a process
+typedef struct {
+    int process_id;
+    int arrival_time;
+    int burst_time;
+    int remaining_time; // calculated
+    int waiting_time; // = (Total waiting time – No.of milliseconds Process executed – Arrival Time)
+    int turnaround_time; // Turnaround Time = Completion Time – Arrival time
     int is_completed;
 } Process;
 
@@ -26,7 +99,7 @@ int n; // Number of processes
  * @param proc Array of processes
  * @param current_time Current time in the scheduling process
  * @return Index of the process with the shortest remaining time, or -1 if none are available
- */
+ *
 int findNextProcess(Process proc[], int current_time) {
     int min_time = INT_MAX;
     int index = -1;
@@ -46,7 +119,7 @@ int findNextProcess(Process proc[], int current_time) {
 /**
  * Function to perform Shortest Remaining Time First (SRTF) scheduling
  * @param proc Array of processes
- */
+ *
 void srtf(Process proc[]) {
     int current_time = 0;
     int completed = 0;
@@ -86,7 +159,7 @@ void srtf(Process proc[]) {
 /**
  * Function to print the processes and their details
  * @param proc Array of processes
- */
+ *
 void printProcesses(Process proc[]) {
     printf("Process ID\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time\n");
     for (int i = 0; i < n; i++) {
@@ -123,3 +196,4 @@ int main() {
 
     return 0;
 }
+*/
