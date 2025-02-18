@@ -47,4 +47,4 @@ run:
 # Clean up compiled files
 clean:
 	rm -f $(RR_EXEC) $(SJF_EXEC)
-	echo "Cleanup completed!"
+	@echo "Cleanup completed!"

@@ -121,7 +121,12 @@ void printProcesses(Process proc[], int n) {
 
 int main() {
     // Initializing process list
-    Process proc[] = {{1, 0, 24}, {2, 0, 3}, {3, 0, 3}};
+    Process proc[] = {
+        {1, 0, 24, 0, 0, 0},
+        {2, 0, 3, 0, 0, 0},
+        {3, 0, 3, 0, 0, 0}
+    };
+
     int n = sizeof(proc) / sizeof(proc[0]); // Number of processes
     int quantum = 4; // Time quantum for Round Robin scheduling
 

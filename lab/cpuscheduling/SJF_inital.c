@@ -90,9 +90,14 @@ void srtf(Process proc[]) {
 void printProcesses(Process proc[]) {
     printf("Process ID\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time\n");
     for (int i = 0; i < n; i++) {
-        printf("%d\t\t%d\t\t%d\t\t%d\t\t%d\n",
-               proc[i].process_id, proc[i].arrival_time, proc[i].burst_time,
-               proc[i].waiting_time, proc[i].turnaround_time);
+        printf(
+            "%d\t\t%d\t\t%d\t\t%d\t\t%d\n",
+            proc[i].process_id,
+            proc[i].arrival_time,
+            proc[i].burst_time,
+            proc[i].waiting_time,
+            proc[i].turnaround_time
+        );
     }
 }
 
@@ -101,7 +106,13 @@ void printProcesses(Process proc[]) {
 
 int main() {
     // Initialize processes with their IDs, arrival times, and burst times
-    Process proc[] = {{1, 0, 8}, {2, 1, 4}, {3, 2, 9}, {4, 3, 5}};
+    Process proc[] = {
+        {1, 0, 8, 0, 0, 0, 0},
+        {2, 1, 4, 0, 0, 0, 0},
+        {3, 2, 9, 0, 0, 0, 0},
+        {4, 3, 5, 0, 0, 0, 0}
+    };
+
     n = sizeof(proc) / sizeof(proc[0]);
 
     // Execute Shortest Remaining Time First scheduling
