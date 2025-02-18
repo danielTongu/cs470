@@ -31,3 +31,4 @@ run: $(SRC_EXEC)
 # Run this using 'make clean'
 clean:
 	rm -f $(SRC_EXEC)
+	@echo "Cleanup completed!"

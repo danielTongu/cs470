@@ -29,3 +29,4 @@ run: $(SRC_EXEC)
 # Clean rule: Deletes the compiled executable to free up space or for recompilation
 clean:
 	rm -f $(SRC_EXEC)
+	@echo "Cleanup completed!"

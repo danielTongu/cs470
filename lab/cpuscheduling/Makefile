@@ -11,7 +11,6 @@ SJF_EXEC = sjf_algorithm
 
 
 
-
 # Source files
 RR_SRC = RR_scheduling.c
 SJF_SRC = SJF_scheduling.c
@@ -40,7 +39,6 @@ run:
 	elif [ $$choice -eq 2 ]; then ./$(SJF_EXEC); \
 	elif [ $$choice -eq 3 ]; then ./$(RR_EXEC) && ./$(SJF_EXEC); \
 	else echo "Invalid choice"; fi
-
 
 
 
