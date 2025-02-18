@@ -13,8 +13,8 @@ SJF_EXEC = sjf_algorithm
 
 
 # Source files
-RR_SRC = RR_inital.c
-SJF_SRC = SJF_inital.c
+RR_SRC = RR_scheduling.c
+SJF_SRC = SJF_scheduling.c
 
 
 
