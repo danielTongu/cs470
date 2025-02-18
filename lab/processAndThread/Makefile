@@ -10,20 +10,24 @@ CC = gcc
 CFLAGS = -Wall -Wextra -g
 
 # The target executable file
-TARGET = process_manager
+SRC_EXEC = process_manager
 
 # The source code file
 SRC = process_manager.c
 
 # Default target: Build the executable
 # This is the first target executed when running 'make' without arguments
-all: $(TARGET)
+all: $(SRC_EXEC)
 
 # Rule to compile the program
-$(TARGET): $(SRC)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
+$(SRC_EXEC): $(SRC)
+	$(CC) $(CFLAGS) -o $(SRC_EXEC) $(SRC)
+
+# Rule to run the compiled program
+run: $(SRC_EXEC)
+	./$(SRC_EXEC)
 
 # Clean rule: Deletes the compiled executable to free up space or for recompilation
 # Run this using 'make clean'
 clean:
-	rm -f $(TARGET)
+	rm -f $(SRC_EXEC)
