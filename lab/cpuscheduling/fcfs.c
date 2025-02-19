@@ -1,27 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "process.h"
 
 /**
- * @struct Process
- * @brief Structure to represent a process in FCFS scheduling
+ * @brief Swaps two process elements in an array.
  */
-typedef struct {
-    int process_id;
-    int arrival_time;
-    int burst_time;
-    int waiting_time;
-    int turnaround_time;
-    int completion_time;
-} Process;
-
-
+void swap(Process *a, Process *b) {
+    Process temp = *a;
+    *a = *b;
+    *b = temp;
+}
 
 /**
- * @brief QuickSort partition function (Sorting by Arrival Time)
- * @param proc Array of processes
- * @param low Starting index
- * @param high Ending index
- * @return int Partition index
+ * @brief Partitions the array for QuickSort.
  */
 int partition(Process proc[], int low, int high) {
     int pivot = proc[high].arrival_time;
@@ -30,25 +21,15 @@ int partition(Process proc[], int low, int high) {
     for (int j = low; j < high; j++) {
         if (proc[j].arrival_time < pivot) {
             i++;
-            Process temp = proc[i];
-            proc[i] = proc[j];
-            proc[j] = temp;
+            swap(&proc[i], &proc[j]);
         }
     }
-
-    Process temp = proc[i + 1];
-    proc[i + 1] = proc[high];
-    proc[high] = temp;
+    swap(&proc[i + 1], &proc[high]);
     return i + 1;
 }
 
-
-
 /**
- * @brief QuickSort algorithm to sort processes by arrival time
- * @param proc Array of processes
- * @param low Starting index
- * @param high Ending index
+ * @brief QuickSort function to sort processes by arrival time.
  */
 void quickSort(Process proc[], int low, int high) {
     if (low < high) {
@@ -58,77 +39,43 @@ void quickSort(Process proc[], int low, int high) {
     }
 }
 
-
-
 /**
- * @brief Function to perform First-Come, First-Served (FCFS) Scheduling
+ * @brief Executes the First-Come, First-Served (FCFS) scheduling algorithm.
+ *
  * @param proc Array of processes
- * @param n Number of processes
+ * @param num_processes Number of processes
  */
-void fcfs(Process proc[], int n) {
-    // Sort processes based on arrival time using QuickSort
-    quickSort(proc, 0, n - 1);
+void fcfs(Process proc[], int num_processes) {
+    quickSort(proc, 0, num_processes - 1); // Sort processes by arrival time
+    int current_time = 0;
 
-    // Compute completion, waiting, and turnaround times
-    proc[0].waiting_time = 0; // First process has no waiting time
-    proc[0].completion_time = proc[0].arrival_time + proc[0].burst_time;
-    proc[0].turnaround_time = proc[0].completion_time - proc[0].arrival_time;
-
-    for (int i = 1; i < n; i++) {
-        // Calculate waiting time based on previous process completion
-        proc[i].waiting_time = proc[i - 1].completion_time - proc[i].arrival_time;
-
-        // Ensure waiting time is not negative (for idle CPU times)
-        if (proc[i].waiting_time < 0) {
-            proc[i].waiting_time = 0;
+    for (int i = 0; i < num_processes; i++) {
+        if (current_time < proc[i].arrival_time) {
+            current_time = proc[i].arrival_time; // CPU remains idle if no process has arrived
         }
-
-        // Compute completion time
-        proc[i].completion_time = proc[i].arrival_time + proc[i].waiting_time + proc[i].burst_time;
-
-        // Compute turnaround time
+        printf("Time %d: Process %d starts\n", current_time, proc[i].process_id);
+        proc[i].completion_time = current_time + proc[i].burst_time;
         proc[i].turnaround_time = proc[i].completion_time - proc[i].arrival_time;
+        proc[i].waiting_time = proc[i].turnaround_time - proc[i].burst_time;
+        current_time = proc[i].completion_time;
+        printf("Time %d: Process %d completes\n", current_time, proc[i].process_id);
     }
 }
-
-
-
-/**
- * @brief Function to print process details
- * @param proc Array of processes
- * @param n Number of processes
- */
-void printProcesses(Process proc[], int n) {
-    printf("Process ID\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time\tCompletion Time\n");
-    for (int i = 0; i < n; i++) {
-        printf(
-            "%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",
-            proc[i].process_id,
-            proc[i].arrival_time,
-            proc[i].burst_time,
-            proc[i].waiting_time,
-            proc[i].turnaround_time,
-            proc[i].completion_time
-        );
-    }
-}
-
-
 
 int main() {
-    // Define processes (process_id, arrival_time, burst_time)
-    Process proc[] = {
-        {1, 5, 3, 0, 0, 0},
-        {2, 0, 8, 0, 0, 0},
-        {3, 2, 6, 0, 0, 0},
-        {4, 4, 5, 0, 0, 0},
-        {5, 1, 4, 0, 0, 0}
+    int input[][3] = {
+        {3, 2, 8},
+        {1, 0, 5},
+        {4, 3, 6},
+        {2, 1, 3}
     };
 
-    int n = sizeof(proc) / sizeof(proc[0]); // Number of processes
+    int num_processes = sizeof(input) / sizeof(input[0]);
+    Process* proc = createProcessArray(input, num_processes);
 
-    fcfs(proc, n);  // Perform FCFS scheduling
-    printProcesses(proc, n); // Print process details
+    fcfs(proc, num_processes);
+    printProcesses(proc, num_processes);
 
+    free(proc);
     return 0;
 }

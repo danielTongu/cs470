@@ -1,127 +1,76 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "process.h"
 
 /**
- * @struct Process
- * @brief Structure to represent a process in Priority Scheduling
- */
-typedef struct {
-    int process_id;
-    int arrival_time;
-    int burst_time;
-    int priority;
-    int waiting_time;
-    int turnaround_time;
-    int completion_time;
-} Process;
-
-/**
- * @brief QuickSort partition function (Sorting by Priority)
+ * @brief Finds the index of the process with the highest priority.
+ *
  * @param proc Array of processes
- * @param low Starting index
- * @param high Ending index
- * @return int Partition index
+ * @param num_processes Number of processes
+ * @param current_time The current execution time
+ * @return int The index of the highest priority process to be executed
  */
-int partition(Process proc[], int low, int high) {
-    int pivot = proc[high].priority; // Lower priority number = higher priority
-    int i = low - 1;
+int findHighestPriorityProcess(Process proc[], int num_processes, int current_time) {
+    int highest_priority = INT_MAX;
+    int index = -1;
 
-    for (int j = low; j < high; j++) {
-        if (proc[j].priority < pivot) { // Higher priority first
-            i++;
-            Process temp = proc[i];
-            proc[i] = proc[j];
-            proc[j] = temp;
+    for (int i = 0; i < num_processes; i++) {
+        if (proc[i].arrival_time <= current_time && proc[i].remaining_time > 0 && proc[i].priority < highest_priority) {
+            highest_priority = proc[i].priority;
+            index = i;
         }
     }
-
-    Process temp = proc[i + 1];
-    proc[i + 1] = proc[high];
-    proc[high] = temp;
-    return i + 1;
+    return index;
 }
 
 /**
- * @brief QuickSort algorithm to sort processes by priority
+ * @brief Executes the Priority Scheduling algorithm (Non-Preemptive).
+ *
  * @param proc Array of processes
- * @param low Starting index
- * @param high Ending index
+ * @param num_processes Number of processes
  */
-void quickSort(Process proc[], int low, int high) {
-    if (low < high) {
-        int pi = partition(proc, low, high);
-        quickSort(proc, low, pi - 1);
-        quickSort(proc, pi + 1, high);
-    }
-}
+void priorityScheduling(Process proc[], int num_processes) {
+    int current_time = 0;
+    int completed = 0;
 
-/**
- * @brief Function to perform Priority Scheduling (Non-Preemptive)
- * @param proc Array of processes
- * @param n Number of processes
- */
-void priorityScheduling(Process proc[], int n) {
-    // Sort processes based on priority (lower number = higher priority)
-    quickSort(proc, 0, n - 1);
+    while (completed != num_processes) {
+        int index = findHighestPriorityProcess(proc, num_processes, current_time);
 
-    // Compute completion, waiting, and turnaround times
-    proc[0].waiting_time = 0; // First process has no waiting time
-    proc[0].completion_time = proc[0].arrival_time + proc[0].burst_time;
-    proc[0].turnaround_time = proc[0].completion_time - proc[0].arrival_time;
-
-    for (int i = 1; i < n; i++) {
-        // Calculate waiting time as completion time of the previous process - arrival time
-        proc[i].waiting_time = proc[i - 1].completion_time - proc[i].arrival_time;
-
-        // Ensure waiting time is not negative (for idle CPU times)
-        if (proc[i].waiting_time < 0) {
-            proc[i].waiting_time = 0;
+        if (index != -1) {
+            printf("Time %d: Process %d starts\n", current_time, proc[index].process_id);
+            current_time += proc[index].burst_time;
+            proc[index].completion_time = current_time;
+            proc[index].turnaround_time = proc[index].completion_time - proc[index].arrival_time;
+            proc[index].waiting_time = proc[index].turnaround_time - proc[index].burst_time;
+            proc[index].remaining_time = 0;
+            proc[index].is_completed = 1;
+            completed++;
+            printf("Time %d: Process %d completes\n", current_time, proc[index].process_id);
+        } else {
+            current_time++;
         }
-
-        // Compute completion time
-        proc[i].completion_time = proc[i].arrival_time + proc[i].waiting_time + proc[i].burst_time;
-
-        // Compute turnaround time
-        proc[i].turnaround_time = proc[i].completion_time - proc[i].arrival_time;
-    }
-}
-
-/**
- * @brief Function to print process details
- * @param proc Array of processes
- * @param n Number of processes
- */
-void printProcesses(Process proc[], int n) {
-    printf("Process ID\tArrival Time\tBurst Time\tPriority\tWaiting Time\tTurnaround Time\tCompletion Time\n");
-
-    for (int i = 0; i < n; i++) {
-        printf(
-            "%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",
-            proc[i].process_id,
-            proc[i].arrival_time,
-            proc[i].burst_time,
-            proc[i].priority,
-            proc[i].waiting_time,
-            proc[i].turnaround_time,
-            proc[i].completion_time
-        );
     }
 }
 
 int main() {
-    // Define processes (process_id, arrival_time, burst_time, priority)
-    Process proc[] = {
-        {1, 0, 10, 2},
-        {2, 1, 5, 1},
-        {3, 2, 8, 3},
-        {4, 3, 6, 1},
-        {5, 4, 2, 4}
+    int input[][4] = {
+        {1, 0, 8, 3},
+        {2, 1, 4, 1},
+        {3, 2, 9, 4},
+        {4, 3, 5, 2}
     };
 
-    int n = sizeof(proc) / sizeof(proc[0]); // Number of processes
+    int num_processes = sizeof(input) / sizeof(input[0]);
+    Process* proc = (Process*)malloc(num_processes * sizeof(Process));
 
-    priorityScheduling(proc, n);  // Perform Priority Scheduling
-    printProcesses(proc, n); // Print process details
+    for (int i = 0; i < num_processes; i++) {
+        proc[i] = createProcess(input[i][0], input[i][1], input[i][2]);
+        proc[i].priority = input[i][3];
+    }
 
+    priorityScheduling(proc, num_processes);
+    printProcesses(proc, num_processes);
+
+    free(proc);
     return 0;
 }
