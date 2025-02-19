@@ -3,32 +3,31 @@
 
 /**
  * @struct Process
- * @brief Structure to represent a process in FCFS scheduling
+ * @brief Structure to represent a process in Priority Scheduling
  */
 typedef struct {
     int process_id;
     int arrival_time;
     int burst_time;
+    int priority;
     int waiting_time;
     int turnaround_time;
     int completion_time;
 } Process;
 
-
-
 /**
- * @brief QuickSort partition function (Sorting by Arrival Time)
+ * @brief QuickSort partition function (Sorting by Priority)
  * @param proc Array of processes
  * @param low Starting index
  * @param high Ending index
  * @return int Partition index
  */
 int partition(Process proc[], int low, int high) {
-    int pivot = proc[high].arrival_time;
+    int pivot = proc[high].priority; // Lower priority number = higher priority
     int i = low - 1;
 
     for (int j = low; j < high; j++) {
-        if (proc[j].arrival_time < pivot) {
+        if (proc[j].priority < pivot) { // Higher priority first
             i++;
             Process temp = proc[i];
             proc[i] = proc[j];
@@ -42,10 +41,8 @@ int partition(Process proc[], int low, int high) {
     return i + 1;
 }
 
-
-
 /**
- * @brief QuickSort algorithm to sort processes by arrival time
+ * @brief QuickSort algorithm to sort processes by priority
  * @param proc Array of processes
  * @param low Starting index
  * @param high Ending index
@@ -58,15 +55,13 @@ void quickSort(Process proc[], int low, int high) {
     }
 }
 
-
-
 /**
- * @brief Function to perform First-Come, First-Served (FCFS) Scheduling
+ * @brief Function to perform Priority Scheduling (Non-Preemptive)
  * @param proc Array of processes
  * @param n Number of processes
  */
-void fcfs(Process proc[], int n) {
-    // Sort processes based on arrival time using QuickSort
+void priorityScheduling(Process proc[], int n) {
+    // Sort processes based on priority (lower number = higher priority)
     quickSort(proc, 0, n - 1);
 
     // Compute completion, waiting, and turnaround times
@@ -75,7 +70,7 @@ void fcfs(Process proc[], int n) {
     proc[0].turnaround_time = proc[0].completion_time - proc[0].arrival_time;
 
     for (int i = 1; i < n; i++) {
-        // Calculate waiting time based on previous process completion
+        // Calculate waiting time as completion time of the previous process - arrival time
         proc[i].waiting_time = proc[i - 1].completion_time - proc[i].arrival_time;
 
         // Ensure waiting time is not negative (for idle CPU times)
@@ -91,21 +86,21 @@ void fcfs(Process proc[], int n) {
     }
 }
 
-
-
 /**
  * @brief Function to print process details
  * @param proc Array of processes
  * @param n Number of processes
  */
 void printProcesses(Process proc[], int n) {
-    printf("Process ID\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time\tCompletion Time\n");
+    printf("Process ID\tArrival Time\tBurst Time\tPriority\tWaiting Time\tTurnaround Time\tCompletion Time\n");
+
     for (int i = 0; i < n; i++) {
         printf(
-            "%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",
+            "%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",
             proc[i].process_id,
             proc[i].arrival_time,
             proc[i].burst_time,
+            proc[i].priority,
             proc[i].waiting_time,
             proc[i].turnaround_time,
             proc[i].completion_time
@@ -113,21 +108,19 @@ void printProcesses(Process proc[], int n) {
     }
 }
 
-
-
 int main() {
-    // Define processes (process_id, arrival_time, burst_time)
+    // Define processes (process_id, arrival_time, burst_time, priority)
     Process proc[] = {
-        {1, 5, 3, 0, 0, 0},
-        {2, 0, 8, 0, 0, 0},
-        {3, 2, 6, 0, 0, 0},
-        {4, 4, 5, 0, 0, 0},
-        {5, 1, 4, 0, 0, 0}
+        {1, 0, 10, 2},
+        {2, 1, 5, 1},
+        {3, 2, 8, 3},
+        {4, 3, 6, 1},
+        {5, 4, 2, 4}
     };
 
     int n = sizeof(proc) / sizeof(proc[0]); // Number of processes
 
-    fcfs(proc, n);  // Perform FCFS scheduling
+    priorityScheduling(proc, n);  // Perform Priority Scheduling
     printProcesses(proc, n); // Print process details
 
     return 0;
