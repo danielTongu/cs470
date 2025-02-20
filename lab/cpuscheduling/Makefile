@@ -1,17 +1,15 @@
-
-
 # Makefile to compile and run CPU scheduling algorithms
 
 CC = gcc
 CFLAGS = -Wall -Wextra -O2
 
 # Executable names
-RR_EXEC = rr_scheduling
-SJF_EXEC = sjf_scheduling
+RR_EXEC = schedule_rr_exec
+SJF_EXEC = schedule_sjf_exec
 
 # Source files
-RR_SRC = rr.c process.c
-SJF_SRC = sjf.c process.c
+RR_SRC = schedule_rr.c process.c
+SJF_SRC = schedule_sjf.c process.c
 
 # Build rules
 all: $(RR_EXEC) $(SJF_EXEC)
