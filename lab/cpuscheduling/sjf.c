@@ -3,6 +3,7 @@
 #include <limits.h>
 #include "process.h"
 
+
 /**
  * @brief Finds the index of the process with the shortest remaining time.
  *
@@ -23,6 +24,7 @@ int findNextProcess(Process proc[], int num_processes, int current_time) {
     }
     return index;
 }
+
 
 /**
  * @brief Executes the Shortest Job First (SJF) scheduling algorithm (Non-Preemptive).
@@ -61,15 +63,23 @@ void sjf(Process proc[], int num_processes) {
     }
 }
 
+
 int main() {
     int input[][3] = {
-        {1, 0, 8},
+        {1, 0, 8},  /* {process_id,  arrival_time,  burst_time} */
         {2, 1, 4},
         {3, 2, 9},
         {4, 3, 5}
     };
     int num_processes = sizeof(input) / sizeof(input[0]);
-    Process* proc = createProcessArray(input, num_processes);
+    Process* proc = (Process*)malloc(num_processes * sizeof(Process));
+
+    for (int i = 0; i < num_processes; i++) {
+        proc[i].process_id = input[i][0];
+        proc[i].arrival_time = input[i][1];
+        proc[i].burst_time = input[i][2];
+        initializeProcess(&proc[i]);
+    }
 
     sjf(proc, num_processes);
     printProcesses(proc, num_processes);

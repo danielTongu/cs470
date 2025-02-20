@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "process.h"
 
+
 /**
  * @brief Finds the index of the process with the highest priority.
  *
@@ -22,6 +23,7 @@ int findHighestPriorityProcess(Process proc[], int num_processes, int current_ti
     }
     return index;
 }
+
 
 /**
  * @brief Executes the Priority Scheduling algorithm (Non-Preemptive).
@@ -52,20 +54,26 @@ void priorityScheduling(Process proc[], int num_processes) {
     }
 }
 
+
 int main() {
     int input[][4] = {
-        {1, 0, 8, 3},
-        {2, 1, 4, 1},
-        {3, 2, 9, 4},
-        {4, 3, 5, 2}
+        {1, 10, 3},  /* {process_id,  burst_time, priority} */
+        {2, 1, 1},
+        {3, 2, 4},
+        {4, 1, 5},
+        {4, 5, 2}
     };
 
     int num_processes = sizeof(input) / sizeof(input[0]);
     Process* proc = (Process*)malloc(num_processes * sizeof(Process));
 
+
     for (int i = 0; i < num_processes; i++) {
-        proc[i] = createProcess(input[i][0], input[i][1], input[i][2]);
-        proc[i].priority = input[i][3];
+        proc[i].arrival_time = i;
+        proc[i].process_id = input[i][0];
+        proc[i].burst_time = input[i][1];
+        proc[i].priority = input[i][2];
+        initializeProcess(&proc[i]);
     }
 
     priorityScheduling(proc, num_processes);

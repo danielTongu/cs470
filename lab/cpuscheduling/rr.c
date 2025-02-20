@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "process.h"
 
+
 /**
  * @brief Function to calculate waiting times and execution order for all processes
  * @param proc Array of processes
@@ -42,6 +43,7 @@ void calculateWaitingTimeAndExecutionOrder(Process proc[], int num_processes, in
     printf("\n");
 }
 
+
 /**
  * @brief Function to calculate turnaround times for all processes
  * @param proc Array of processes
@@ -52,6 +54,7 @@ void calculateTurnaroundTime(Process proc[], int num_processes) {
         proc[i].turnaround_time = proc[i].completion_time - proc[i].arrival_time;
     }
 }
+
 
 /**
  * @brief Executes the Round Robin scheduling algorithm
@@ -64,15 +67,24 @@ void roundRobin(Process proc[], int num_processes, int quantum) {
     calculateTurnaroundTime(proc, num_processes);
 }
 
+
 int main() {
     int input[][3] = {
-        {1, 0, 24},
+        {1, 0, 24}, /* {process_id,  arrival_time,  burst_time} */
         {2, 0, 3},
         {3, 0, 3}
     };
 
     int num_processes = sizeof(input) / sizeof(input[0]);
-    Process* proc = createProcessArray(input, num_processes);
+    Process* proc = (Process*)malloc(num_processes * sizeof(Process));
+
+    for (int i = 0; i < num_processes; i++) {
+        proc[i].process_id = input[i][0];
+        proc[i].arrival_time = input[i][1];
+        proc[i].burst_time = input[i][2];
+        initializeProcess(&proc[i]);
+    }
+
     int quantum = 4; // Time quantum for Round Robin scheduling
 
     roundRobin(proc, num_processes, quantum);

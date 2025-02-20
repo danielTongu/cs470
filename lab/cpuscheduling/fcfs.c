@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "process.h"
 
+
 /**
  * @brief Swaps two process elements in an array.
  */
@@ -10,6 +11,7 @@ void swap(Process *a, Process *b) {
     *a = *b;
     *b = temp;
 }
+
 
 /**
  * @brief Partitions the array for QuickSort.
@@ -28,6 +30,7 @@ int partition(Process proc[], int low, int high) {
     return i + 1;
 }
 
+
 /**
  * @brief QuickSort function to sort processes by arrival time.
  */
@@ -38,6 +41,7 @@ void quickSort(Process proc[], int low, int high) {
         quickSort(proc, pi + 1, high);
     }
 }
+
 
 /**
  * @brief Executes the First-Come, First-Served (FCFS) scheduling algorithm.
@@ -62,16 +66,24 @@ void fcfs(Process proc[], int num_processes) {
     }
 }
 
+
 int main() {
     int input[][3] = {
-        {3, 2, 8},
+        {3, 2, 8},  /* {process_id,  arrival_time,  burst_time} */
         {1, 0, 5},
         {4, 3, 6},
         {2, 1, 3}
     };
 
     int num_processes = sizeof(input) / sizeof(input[0]);
-    Process* proc = createProcessArray(input, num_processes);
+    Process* proc = (Process*)malloc(num_processes * sizeof(Process));
+
+    for (int i = 0; i < num_processes; i++) {
+        proc[i].process_id = input[i][0];
+        proc[i].arrival_time = input[i][1];
+        proc[i].burst_time = input[i][2];
+        initializeProcess(&proc[i]);
+    }
 
     fcfs(proc, num_processes);
     printProcesses(proc, num_processes);
