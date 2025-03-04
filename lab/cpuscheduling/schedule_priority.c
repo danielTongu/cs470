@@ -1,5 +1,4 @@
 #include "process.h"
-#include <stdlib.h>
 
 /**
  * @brief Finds the highest-priority available process.
