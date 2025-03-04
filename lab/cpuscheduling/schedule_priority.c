@@ -1,5 +1,8 @@
 #include "process.h"
 
+
+
+
 /**
  * @brief Finds the highest-priority available process.
  * - For Non-Preemptive Priority Scheduling: Selects process with the **highest priority** (lowest priority number).
@@ -29,6 +32,9 @@ int findHighestPriorityProcess(Process proc[], int num_processes, int time, int 
     }
     return min_index;
 }
+
+
+
 
 /**
  * @brief Executes the selected process.
@@ -65,6 +71,9 @@ void executeProcessPriority(Process proc[], int index, int *time, int gantt_char
     }
 }
 
+
+
+
 /**
  * @brief Implements Priority Scheduling (Non-Preemptive)
  * - The process with the **highest priority** executes first.
@@ -93,6 +102,9 @@ void priorityScheduling(Process proc[], int num_processes) {
     }
     printf("\n");
 }
+
+
+
 
 /**
  * @brief Implements Preemptive Priority Scheduling.
@@ -125,6 +137,9 @@ void priorityPreemptiveScheduling(Process proc[], int num_processes) {
     printf("\n");
 }
 
+
+
+
 /**
  * @brief Main function for Priority Scheduling
  */
@@ -141,11 +156,12 @@ int main() {
 
     // Non-preemptive Priority Scheduling
     for (int i = 0; i < num_processes; i++) {
+        initializeProcess(&proc[i]);
         proc[i].process_id = input[i][0];
         proc[i].arrival_time = input[i][1];
         proc[i].burst_time = input[i][2];
-        initializeProcess(&proc[i]);  // Ensure remaining_time is set
         proc[i].priority = input[i][3];
+        proc[i].remaining_time = proc[i].burst_time;// Ensure remaining_time is set
     }
 
     priorityScheduling(proc, num_processes);
@@ -153,11 +169,12 @@ int main() {
 
     // Reset processes for Preemptive Priority Scheduling
     for (int i = 0; i < num_processes; i++) {
+        initializeProcess(&proc[i]);
         proc[i].process_id = input[i][0];
         proc[i].arrival_time = input[i][1];
         proc[i].burst_time = input[i][2];
-        initializeProcess(&proc[i]);
         proc[i].priority = input[i][3];
+        proc[i].remaining_time = proc[i].burst_time;// Ensure remaining_time is set
     }
 
     // Preemptive Priority Scheduling

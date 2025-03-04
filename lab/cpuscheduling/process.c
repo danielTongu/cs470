@@ -2,6 +2,8 @@
 
 #include "process.h"
 
+
+
 /**
  * @brief Function to initialize a process structure
  */
@@ -17,6 +19,9 @@ void initializeProcess(Process *p) {
     p->queue_level = 0; // Default queue level (for Multilevel Queue Scheduling)
     p->time_quantum = 0; // Default time quantum (only used in RR if needed per process)
 }
+
+
+
 
 /**
  * @brief Function to print process scheduling results

@@ -1,5 +1,7 @@
 #include "process.h"
 
+
+
 /**
  * @brief Finds the next available process based on FCFS.
  * - Selects the process that arrived first and has not completed.
@@ -23,6 +25,9 @@ int findNextFCFSProcess(Process proc[], int num_processes, int time) {
     }
     return min_index;
 }
+
+
+
 
 /**
  * @brief Executes the selected process.
@@ -53,6 +58,9 @@ void executeProcessFCFS(Process proc[], int index, int *time, int gantt_chart[],
     printf("Time %d: Process %d completes\n", *time, proc[index].process_id);
 }
 
+
+
+
 /**
  * @brief Implements First-Come, First-Served (FCFS) Scheduling.
  * - The process that arrives first gets executed first.
@@ -82,6 +90,9 @@ void fcfsScheduling(Process proc[], int num_processes) {
     printf("\n");
 }
 
+
+
+
 /**
  * @brief Main function for FCFS Scheduling
  */
@@ -98,10 +109,11 @@ int main() {
 
     // Initialize processes
     for (int i = 0; i < num_processes; i++) {
+        initializeProcess(&proc[i]);
         proc[i].process_id = input[i][0];
         proc[i].arrival_time = input[i][1];
         proc[i].burst_time = input[i][2];
-        initializeProcess(&proc[i]);  // Ensure remaining_time is set
+        proc[i].remaining_time = proc[i].burst_time;// Ensure remaining_time is set
     }
 
     fcfsScheduling(proc, num_processes);
