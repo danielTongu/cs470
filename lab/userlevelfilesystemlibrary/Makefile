@@ -1,32 +1,36 @@
-# Compiler to use
+# Compiler
 CC = gcc
 
-# Compiler flags
+# Compiler Flags
 CFLAGS = -Wall -Wextra -Werror -std=c11
 
 # Source files
 SRCS = Daniel_libFS.c Daniel_testFS.c
 
-# Object files (derived from source files)
+# Object files
 OBJS = $(SRCS:.c=.o)
 
 # Executable name
-TARGET = Daniel_testFS
+TARGET = Daniel_exeFS
 
-# Default target
+# Default target (compile and link everything)
 all: $(TARGET)
 
 # Rule to link the executable
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS)
 
-# Rule to compile source files into object files
+# Rule to compile .c files into .o object files
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
+
+# Run the compiled program
+run: $(TARGET)
+	./$(TARGET)
 
 # Clean up generated files
 clean:
 	rm -f $(OBJS) $(TARGET)
 
-# Phony targets
-.PHONY: all clean
+# Phony targets (these do not represent actual files)
+.PHONY: all clean run

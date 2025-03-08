@@ -1,6 +1,4 @@
 #include "Daniel_libFS.h"
-#include <unistd.h> // For unlink function
-
 
 
 // Global variables

@@ -1,4 +1,4 @@
-#include "Daniel_libFS.c"
+#include "Daniel_libFS.h"
 #include <ctype.h>  // For tolower()
 #include <stdio.h>  // For standard I/O functions
 
