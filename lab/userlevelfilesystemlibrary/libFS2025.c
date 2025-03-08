@@ -1,8 +1,13 @@
 #include "libFS2025.h"
+#include <unistd.h> // For unlink function
+
+
 
 // Global variables
 FileEntry file_table[MAX_FILES];  // File table to track files
 int file_count = 0;               // Number of files in the system
+
+
 
 // Create a new file
 int fileCreate(const char *filename) {
@@ -33,6 +38,8 @@ int fileCreate(const char *filename) {
     return 0;
 }
 
+
+
 // Open a file
 int fileOpen(const char *filename) {
     for (int i = 0; i < file_count; i++) {
@@ -50,6 +57,8 @@ int fileOpen(const char *filename) {
     printf("Error: File '%s' not found.\n", filename);
     return -1;
 }
+
+
 
 // Write data to a file
 int fileWrite(int file_index, const char *data) {
@@ -75,12 +84,104 @@ int fileWrite(int file_index, const char *data) {
     return 0;
 }
 
+
+
 // Read data from a file
+int fileRead(int file_index, char *buffer, int buffer_size) {
+    // Validate file index
+    if (file_index < 0 || file_index >= file_count) {
+        printf("Error: Invalid file index %d.\n", file_index);
+        return -1;
+    }
+
+    // Check if the file is open
+    if (!file_table[file_index].is_open) {
+        printf("Error: File '%s' is not open.\n", file_table[file_index].filename);
+        return -1;
+    }
+
+    // Open the file in read mode
+    FILE *file = fopen(file_table[file_index].filename, "r");
+    if (!file) {
+        printf("Error: Unable to open file '%s' for reading.\n", file_table[file_index].filename);
+        return -1;
+    }
+
+    // Read data from the file
+    size_t bytes_read = fread(buffer, 1, buffer_size, file);
+    if (ferror(file)) {
+        printf("Error: Failed to read from file '%s'.\n", file_table[file_index].filename);
+        fclose(file);
+        return -1;
+    }
+
+    // Close the file
+    fclose(file);
+
+    printf("Read %zu bytes from file '%s' successfully.\n", bytes_read, file_table[file_index].filename);
+    return (int)bytes_read;
+}
 
 
 
 // Close a file
+int fileClose(int file_index) {
+    // Validate file index
+    if (file_index < 0 || file_index >= file_count) {
+        printf("Error: Invalid file index %d.\n", file_index);
+        return -1;
+    }
+
+    // Check if the file is already closed
+    if (!file_table[file_index].is_open) {
+        printf("Error: File '%s' is already closed.\n", file_table[file_index].filename);
+        return -1;
+    }
+
+    // Mark the file as closed
+    file_table[file_index].is_open = 0;
+
+    printf("File '%s' closed successfully.\n", file_table[file_index].filename);
+    return 0;
+}
 
 
 
 // Delete a file
+int fileDelete(const char *filename) {
+    // Find the file in the file table
+    int file_index = -1;
+    for (int i = 0; i < file_count; i++) {
+        if (strcmp(file_table[i].filename, filename) == 0) {
+            file_index = i;
+            break;
+        }
+    }
+
+    // Check if the file was found
+    if (file_index == -1) {
+        printf("Error: File '%s' not found.\n", filename);
+        return -1;
+    }
+
+    // Check if the file is open
+    if (file_table[file_index].is_open) {
+        printf("Error: Cannot delete file '%s' because it is open.\n", filename);
+        return -1;
+    }
+
+    // Delete the file from the local disk
+    if (remove(filename) != 0) {
+        printf("Error: Unable to delete file '%s'.\n", filename);
+        return -1;
+    }
+
+    // Remove the file from the file table by shifting subsequent entries
+    for (int i = file_index; i < file_count - 1; i++) {
+        file_table[i] = file_table[i + 1];
+    }
+    file_count--;
+
+    printf("File '%s' deleted successfully.\n", filename);
+    return 0;
+}

@@ -1,30 +1,32 @@
-# Compiler and flags  -Wextra -std=c99
+# Compiler to use
 CC = gcc
-CFLAGS = -Wall
+
+# Compiler flags
+CFLAGS = -Wall -Wextra -Werror -std=c11
 
 # Source files
-SRCS = libFS2025.c testfile2025.c
+SRCS = Daniel_libFS.c Daniel_testFS.c
 
-# Object files (automatically generated from source files)
+# Object files (derived from source files)
 OBJS = $(SRCS:.c=.o)
 
 # Executable name
-TARGET = test_app
+TARGET = Daniel_testFS
 
-# Default target (run when you type 'make')
+# Default target
 all: $(TARGET)
 
-# Rule to build the executable
+# Rule to link the executable
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS)
 
-# Rule to compile .c files into .o files
-%.o: %.c libFS2025.h
+# Rule to compile source files into object files
+%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Clean up build files
-# clean:
-# 	rm -f $(OBJS) $(TARGET)
+# Clean up generated files
+clean:
+	rm -f $(OBJS) $(TARGET)
 
-# Phony targets (not actual files)
-# .PHONY: all clean
+# Phony targets
+.PHONY: all clean
