@@ -1,5 +1,5 @@
-#ifndef LIBFS2025_H
-#define LIBFS2025_H
+#ifndef DANIEL_LIBFS_H
+#define DANIEL_LIBFS_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -74,4 +74,4 @@ int fileClose(int file_index);
  */
 int fileDelete(const char *filename);
 
-#endif // LIBFS2025_H
+#endif // DANIEL_LIBFS_H
