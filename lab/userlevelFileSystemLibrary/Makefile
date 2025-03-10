@@ -11,7 +11,7 @@ SRCS = Daniel_libFS.c Daniel_testFS.c
 OBJS = $(SRCS:.c=.o)
 
 # Executable name
-TARGET = Daniel_exeFS
+TARGET = Daniel_testApp
 
 # Default target (compile and link everything)
 all: $(TARGET)
