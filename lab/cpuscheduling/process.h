@@ -10,20 +10,18 @@
 
 /**
  * @struct Process
- * @brief Structure to represent a process for CPU scheduling
+ * @brief Structure to represent a process for CPU scheduling.
+ * Lower effective priority means a higher scheduling priority.
  */
 typedef struct {
-     int process_id;
-     int arrival_time;
-     int burst_time;
-     int remaining_time;  // Used in Preemptive Scheduling & Round Robin
-     int completion_time;
-     int is_completed;    // Used in Non-Preemptive Scheduling (FCFS, SJF, Priority)
-     int priority;        // Needed for Priority Scheduling
-     int start_time;      // First time the process gets CPU (for Response Ratio Scheduling)
-     int response_time;   // Response time for Response Ratio algorithms
-     int queue_level;     // For Multilevel Queue Scheduling
-     int time_quantum;    // For Round Robin scheduling (if specific to a process)
+  int process_id;      /**< Unique identifier for the process. */
+  int arrival_time;    /**< Time at which the process arrives. */
+  int burst_time;      /**< Total CPU time required. */
+  int remaining_time;  /**< Remaining CPU time (used in preemptive scheduling). */
+  int completion_time; /**< Time at which the process completes execution. */
+  int is_completed;    /**< Flag to indicate if the process has completed. */
+  int priority;        /**< Original priority (lower number means higher priority). */
+  int time_quantum;    /**< Time quantum for Round Robin scheduling (if needed). */
 } Process;
 
 
@@ -35,23 +33,25 @@ void initializeProcess(Process *p);
 
 
 /**
- * @brief Calculates the turnarround time of a process.
+ * @brief Calculates the turnaround time of a process.
  * @param p Pointer to the Process.
+ * @return Turnaround time.
  */
 int calculateTurnarroundTime(Process *p);
 
 
 /**
- * @brief Calculates the waiting time of process.
+ * @brief Calculates the waiting time of a process.
  * @param p Pointer to the Process.
+ * @return Waiting time.
  */
 int calculateWaitingTime(Process *p);
 
 
 /**
  * @brief Prints the process information.
- * @param proc Array of processes
- * @param num_processes Number of processes
+ * @param proc Array of processes.
+ * @param num_processes Number of processes.
  */
 void printProcesses(Process proc[], int num_processes);
 
