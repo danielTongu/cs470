@@ -17,8 +17,6 @@ typedef struct {
      int arrival_time;
      int burst_time;
      int remaining_time;  // Used in Preemptive Scheduling & Round Robin
-     int waiting_time;
-     int turnaround_time;
      int completion_time;
      int is_completed;    // Used in Non-Preemptive Scheduling (FCFS, SJF, Priority)
      int priority;        // Needed for Priority Scheduling
@@ -37,12 +35,24 @@ void initializeProcess(Process *p);
 
 
 /**
+ * @brief Calculates the turnarround time of a process.
+ * @param p Pointer to the Process.
+ */
+int calculateTurnarroundTime(Process *p);
+
+
+/**
+ * @brief Calculates the waiting time of process.
+ * @param p Pointer to the Process.
+ */
+int calculateWaitingTime(Process *p);
+
+
+/**
  * @brief Prints the process information.
  * @param proc Array of processes
  * @param num_processes Number of processes
  */
 void printProcesses(Process proc[], int num_processes);
-
-
 
 #endif // PROCESS_H
